@@ -28,6 +28,12 @@ public class UserController {
 		return ResponseEntity.ok(userRegistrationResponse);
 	}
 
-	
+	@PostMapping(value = "/login")
+	public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest){
+		UserLoginResponse userLoginResponse = authService.login(userLoginRequest);
+		return ResponseEntity.ok(userLoginResponse);
+	}
+
+
 
 }
