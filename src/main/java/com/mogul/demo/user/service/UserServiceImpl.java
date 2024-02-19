@@ -3,6 +3,10 @@ package com.mogul.demo.user.service;
 import java.time.LocalDateTime;
 
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,5 +77,18 @@ public class UserServiceImpl implements UserService{
 	public void passwordEqual(String password_input, String password) {
 		Boolean isEqual = passwordEncoder.encode(password_input).equals(password);
 		if(isEqual) throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
+	}
+
+	@Override
+	public User getUserByToken() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			String username = authentication.getPrincipal().toString();
+			User user = getUserByUsername(username);
+			return user;
+		}
+		else{
+			throw new UsernameNotFoundException("잘못된 요청입니다");
+		}
 	}
 }

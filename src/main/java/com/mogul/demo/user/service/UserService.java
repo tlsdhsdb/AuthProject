@@ -7,6 +7,7 @@ public interface UserService {
 	User modifyUser(User user);
 	User getUser(Long id);
 	User getUserByUsername(String username);
+	User getUserByToken();
 	Boolean deleteUser(Long id);
 	void duplicateNickname(String nickname);
 	void duplicateUsername(String username);
