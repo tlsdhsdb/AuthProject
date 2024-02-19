@@ -81,4 +81,17 @@ public class UserServiceImpl implements UserService{
 		Boolean isEqual = passwordEncoder.encode(password_input).equals(password);
 		if(!isEqual) throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
 	}
+
+	@Override
+	public User getUserByToken() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			String username = authentication.getPrincipal().toString();
+			User user = getUserByUsername(username);
+			return user;
+		}
+		else{
+			throw new UsernameNotFoundException("잘못된 요청입니다");
+		}
+	}
 }
