@@ -3,6 +3,11 @@ package com.mogul.demo.user.service;
 import java.time.LocalDateTime;
 
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +52,8 @@ public class UserServiceImpl implements UserService{
 		return user;
 	}
 
+
+
 	@Override
 	public Boolean deleteUser(Long id) {
 		User deletedUser = getUser(id);
@@ -72,6 +79,6 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void passwordEqual(String password_input, String password) {
 		Boolean isEqual = passwordEncoder.encode(password_input).equals(password);
-		if(isEqual) throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
+		if(!isEqual) throw new IllegalArgumentException("비밀번호가 일치하지 않습니다");
 	}
 }
